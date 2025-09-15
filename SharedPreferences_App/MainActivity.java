@@ -1,75 +1,98 @@
 package com.example.sharedpreferences;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    EditText etName, etPhone, etEmail, etPassword, etConfirmPassword;
-    Button btnSubmit;
-
+    EditText user,mob,pass1,pass2,email;
+    Button submit;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);   // uses your provided XML
+        setContentView(R.layout.activity_main);
 
-        etName = findViewById(R.id.etName);
-        etPhone = findViewById(R.id.etPhone);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        btnSubmit = findViewById(R.id.btnSubmit);
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        user=findViewById(R.id.user);
+        mob=findViewById(R.id.mob);
+        email=findViewById(R.id.email);
+        pass1=findViewById(R.id.pass1);
+        pass2=findViewById(R.id.pass2);
+        submit=findViewById(R.id.sub);
+        sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+        editor =sharedPreferences.edit();
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateAndRegister();
+                String username=user.getText().toString().trim();
+                String mobno=mob.getText().toString().trim();
+                String mail=email.getText().toString().trim();
+                String passw1=pass1.getText().toString().trim();
+                String passw2=pass2.getText().toString().trim();
+
+                if(username.isEmpty())
+                {
+                    user.setError("username is empty");
+                    user.requestFocus();
+                    return;
+                }
+
+                if(mobno.isEmpty())
+                {
+                    mob.setError("Mobile Number is empty");
+                    mob.requestFocus();
+                    return;
+                }
+
+                if(mail.isEmpty())
+                {
+                    email.setError("Email is empty");
+                    email.requestFocus();
+                    return;
+                }
+
+                if(passw1.isEmpty())
+                {
+                    pass1.setError("Enter password");
+                    pass1.requestFocus();
+                    return;
+                }
+
+                if(passw2.isEmpty())
+                {
+                    pass2.setError("Confirm Password");
+                    pass2.requestFocus();
+                    return;
+                }
+
+                if(passw1.length()<6)
+                {
+                    pass1.setError("length must be minimum 6 characters");
+                    pass1.requestFocus();
+                    return;
+                }
+
+                if(!passw1.equals(passw2))
+                {
+                    pass2.setError("Password not match");
+                    pass2.requestFocus();
+                    return;
+                }
+
+                Toast.makeText(MainActivity.this,"Registration successful",Toast.LENGTH_SHORT).show();
+                editor.putString("keyusername",username);
+                editor.putString("keymobile",mobno);
+                editor.putString("keyemail",mail);
+                editor.putString("keypassword",passw2);
+                editor.apply();
             }
         });
-    }
-
-    private void validateAndRegister() {
-        String name = etName.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
-        String confirm = etConfirmPassword.getText().toString().trim();
-
-        if (TextUtils.isEmpty(name)) {
-            etName.setError("Enter your name");
-            return;
-        }
-        if (TextUtils.isEmpty(phone)) {
-            etPhone.setError("Enter your phone number");
-            return;
-        }
-        if (TextUtils.isEmpty(email)) {
-            etEmail.setError("Enter your email");
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            etPassword.setError("Enter a password");
-            return;
-        }
-        if (password.length() < 6) {
-            etPassword.setError("Password must be at least 6 characters");
-            return;
-        }
-        if (!password.equals(confirm)) {
-            etConfirmPassword.setError("Passwords do not match");
-            return;
-        }
-
-        Toast.makeText(this,
-                "Registration Successful\nName: " + name +
-                        "\nPhone: " + phone +
-                        "\nEmail: " + email,
-                Toast.LENGTH_LONG).show();
     }
 }
