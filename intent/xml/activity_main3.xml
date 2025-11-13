@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvFinalMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Final Result"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"/>
+
+    <ImageView
+        android:id="@+id/ivFinalMood"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="Final Mood"/>
+
+</LinearLayout>
